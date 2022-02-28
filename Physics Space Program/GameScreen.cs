@@ -14,7 +14,7 @@ namespace Physics_Space_Program
     {
         /** GLOBAL VALUES **/
         readonly int pixelToUnits = 1000000000; // What is 1 pixel in real life? (1 million kilometres)
-        readonly int timeMultiplier = 50; // 600 million times faster
+        readonly float timeMultiplier = 5; // 600 million times faster
 
 
         readonly List<Object> objs = new List<Object> ();
@@ -23,9 +23,11 @@ namespace Physics_Space_Program
         {
             InitializeComponent();
 
-            objs.Add(new Object(new PointF(0, 0), new PointF(0, 0), 40, Convert.ToInt64(1.989f * Math.Pow(10, 16)))); // Sun
-            objs.Add(new Object(new PointF(148, 0), new PointF(0, 0.95f * pixelToUnits), 5, Convert.ToInt64(5.9722f * Math.Pow(10, 10)))); // Earth
-            objs.Add(new Object(new PointF(219, 0), new PointF(0, 0.1f * pixelToUnits), 5, Convert.ToInt64(6.39f * Math.Pow(10, 9)))); // Mars?
+            objs.Add(new Object(new PointF(0, 0), new PointF(0, 0), 10, Convert.ToInt64(1.989f * Math.Pow(10, 16)))); // Sun
+            objs.Add(new Object(new PointF(69.806f, 0), new PointF(0, 0.17f * pixelToUnits), 2, Convert.ToInt64(3.285f * Math.Pow(10, 9)))); // Mercury
+            objs.Add(new Object(new PointF(107.82f, 0), new PointF(0, 0.145f * pixelToUnits), 5, Convert.ToInt64(4.867f * Math.Pow(10, 10)))); // Venus
+            objs.Add(new Object(new PointF(148, 0), new PointF(0, 0.12f * pixelToUnits), 5, Convert.ToInt64(5.9722f * Math.Pow(10, 10)))); // Earth
+            objs.Add(new Object(new PointF(219, 0), new PointF(0, 0.1f * pixelToUnits), 3, Convert.ToInt64(6.39f * Math.Pow(10, 9)))); // Mars?
 
             foreach (Object obj in objs)
             {
@@ -41,11 +43,11 @@ namespace Physics_Space_Program
             //e.Graphics.TranslateTransform(-objs[1].pos.X, -objs[1].pos.Y);
             foreach (Object obj in objs)
             {
-                e.Graphics.DrawEllipse(new Pen(Color.White, 2), obj.pos.X - obj.radius, obj.pos.Y - obj.radius, obj.radius * 2, obj.radius * 2);
-                foreach(PointF point in obj.listOfPos)
+                foreach (PointF point in obj.listOfPos)
                 {
-                    e.Graphics.DrawRectangle(new Pen(Color.Gray, 2), point.X - 1, point.Y - 1, 2, 2);
+                    e.Graphics.DrawRectangle(new Pen(Color.FromArgb(36, 36, 36), 2), point.X - 1, point.Y - 1, 2, 2);
                 }
+                e.Graphics.DrawEllipse(new Pen(Color.White, 2), obj.pos.X - obj.radius, obj.pos.Y - obj.radius, obj.radius * 2, obj.radius * 2);
             }
         }
 

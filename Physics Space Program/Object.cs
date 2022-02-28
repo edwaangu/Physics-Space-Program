@@ -18,7 +18,7 @@ namespace Physics_Space_Program
         public readonly List<PointF> listOfPos = new List<PointF>();
         int frame = 0;
         int myPixelsToUnits;
-        int myTimeMultiplier;
+        float myTimeMultiplier;
 
         public Object(PointF _pos, PointF _velocity, float _radius, float _mass)
         {
@@ -30,7 +30,7 @@ namespace Physics_Space_Program
             gravConstant = 6.67 * Math.Pow(10, -11);
         }
 
-        public void SetupObject(int _pxToUnits, int _myTimeMultiplier)
+        public void SetupObject(int _pxToUnits, float _myTimeMultiplier)
         {
             myPixelsToUnits = _pxToUnits;
             myTimeMultiplier = _myTimeMultiplier;
@@ -71,8 +71,8 @@ namespace Physics_Space_Program
 
         public void MoveObject()
         {
-            pos.X += (velocity.X / mass) * myTimeMultiplier;
-            pos.Y += (velocity.Y / mass) * myTimeMultiplier;
+            pos.X += (velocity.X / myPixelsToUnits) * myTimeMultiplier;
+            pos.Y += (velocity.Y / myPixelsToUnits) * myTimeMultiplier;
 
             if(frame % 20 == 0)
             {
