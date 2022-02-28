@@ -14,18 +14,21 @@ namespace Physics_Space_Program
         readonly float mass;
         readonly double gravConstant;
 
+        public Color objColor;
+
 
         public readonly List<PointF> listOfPos = new List<PointF>();
         int frame = 0;
         int myPixelsToUnits;
         float myTimeMultiplier;
 
-        public Object(PointF _pos, PointF _velocity, float _radius, float _mass)
+        public Object(PointF _pos, PointF _velocity, float _radius, float _mass, Color _objColor)
         {
             pos = _pos;
             velocity = _velocity;
             radius = _radius;
             mass = _mass;
+            objColor = _objColor;
 
             gravConstant = 6.67 * Math.Pow(10, -11);
         }
@@ -74,7 +77,7 @@ namespace Physics_Space_Program
             pos.X += (velocity.X / myPixelsToUnits) * myTimeMultiplier;
             pos.Y += (velocity.Y / myPixelsToUnits) * myTimeMultiplier;
 
-            if(frame % 20 == 0)
+            if(frame % 5 == 0)
             {
                 listOfPos.Add(pos);
                 if(listOfPos.Count > 15)
