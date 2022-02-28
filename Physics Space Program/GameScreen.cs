@@ -12,6 +12,10 @@ namespace Physics_Space_Program
 {
     public partial class GameScreen : UserControl
     {
+        /** GLOBAL VALUES **/
+        readonly int pixelToUnits = 1000000000; // What is 1 pixel in real life? (1 million kilometres)
+        readonly int timeMultiplier = 50; // 600 million times faster
+
 
         readonly List<Object> objs = new List<Object> ();
 
@@ -19,17 +23,22 @@ namespace Physics_Space_Program
         {
             InitializeComponent();
 
-            objs.Add(new Object(new PointF(-4150, 0), new PointF(0, 0.000000000001f), 10, 15f / 81f));
-            objs.Add(new Object(new PointF(-4000, 0), new PointF(0, 0.00000000005f), 20, 15f));
-            objs.Add(new Object(new PointF(0, 0), new PointF(0, 0), 80, 100f));
+            objs.Add(new Object(new PointF(0, 0), new PointF(0, 0), 40, Convert.ToInt64(1.989f * Math.Pow(10, 16)))); // Sun
+            objs.Add(new Object(new PointF(148, 0), new PointF(0, 0.95f * pixelToUnits), 5, Convert.ToInt64(5.9722f * Math.Pow(10, 10)))); // Earth
+            objs.Add(new Object(new PointF(219, 0), new PointF(0, 0.1f * pixelToUnits), 5, Convert.ToInt64(6.39f * Math.Pow(10, 9)))); // Mars?
+
+            foreach (Object obj in objs)
+            {
+                obj.SetupObject(pixelToUnits, timeMultiplier);
+            }
         }
 
         private void GameScreen_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.ResetTransform();
             e.Graphics.TranslateTransform(this.Width / 2, this.Height / 2);
-            e.Graphics.ScaleTransform(1 /8f, 1 / 8f);
-            e.Graphics.TranslateTransform(-objs[1].pos.X, -objs[1].pos.Y);
+            //e.Graphics.ScaleTransform(1 /8f, 1 / 8f);
+            //e.Graphics.TranslateTransform(-objs[1].pos.X, -objs[1].pos.Y);
             foreach (Object obj in objs)
             {
                 e.Graphics.DrawEllipse(new Pen(Color.White, 2), obj.pos.X - obj.radius, obj.pos.Y - obj.radius, obj.radius * 2, obj.radius * 2);

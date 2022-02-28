@@ -14,10 +14,11 @@ namespace Physics_Space_Program
         readonly float mass;
         readonly double gravConstant;
 
-        readonly long timeMultiplier = 600000000000;
 
         public readonly List<PointF> listOfPos = new List<PointF>();
         int frame = 0;
+        int myPixelsToUnits;
+        int myTimeMultiplier;
 
         public Object(PointF _pos, PointF _velocity, float _radius, float _mass)
         {
@@ -29,10 +30,16 @@ namespace Physics_Space_Program
             gravConstant = 6.67 * Math.Pow(10, -11);
         }
 
+        public void SetupObject(int _pxToUnits, int _myTimeMultiplier)
+        {
+            myPixelsToUnits = _pxToUnits;
+            myTimeMultiplier = _myTimeMultiplier;
+        }
+
         void AddForce(PointF _force)
         {
-            velocity.X += _force.X * (1 / 60f) / mass;
-            velocity.Y += _force.Y * (1 / 60f) / mass;
+            velocity.X += _force.X * (myTimeMultiplier / 60f) / mass;
+            velocity.Y += _force.Y * (myTimeMultiplier / 60f) / mass;
         }
 
         float CalculateDistanceBetweenObjects(Object _obj1, Object _obj2)
@@ -64,11 +71,10 @@ namespace Physics_Space_Program
 
         public void MoveObject()
         {
-            pos.X += (velocity.X / mass) * timeMultiplier;
-            pos.Y += (velocity.Y / mass) * timeMultiplier;
+            pos.X += (velocity.X / mass) * myTimeMultiplier;
+            pos.Y += (velocity.Y / mass) * myTimeMultiplier;
 
-            frame++;
-            if(frame % 10 == 0)
+            if(frame % 20 == 0)
             {
                 listOfPos.Add(pos);
                 if(listOfPos.Count > 250)
@@ -76,11 +82,12 @@ namespace Physics_Space_Program
                     listOfPos.RemoveAt(0);
                 }
             }
+            frame++;
         }
 
         PointF CalculateForcesBetweenObject(Object _obj1, Object _obj2)
         {
-            float theForce = Convert.ToSingle((gravConstant * _obj1.mass * _obj2.mass) / CalculateDistanceBetweenObjects(_obj1, _obj2));
+            float theForce = Convert.ToSingle((gravConstant * _obj1.mass * _obj2.mass) / Math.Pow(CalculateDistanceBetweenObjects(_obj1, _obj2), 2) / myPixelsToUnits * Math.Pow(10, 14));
             float theDir = CalculateDirectionBetweenObjects(_obj1, _obj2);
             return new PointF(Convert.ToSingle(theForce * Math.Cos(theDir)), Convert.ToSingle(theForce * Math.Sin(theDir)));
         }
