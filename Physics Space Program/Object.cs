@@ -21,14 +21,21 @@ namespace Physics_Space_Program
         int frame = 0;
         int myPixelsToUnits;
         float myTimeMultiplier;
+        public bool doWeCare;
 
-        public Object(PointF _pos, PointF _velocity, float _radius, float _mass, Color _objColor)
+        public PointF minimumPoint = new PointF(0, 0);
+        public float minimumDist = float.PositiveInfinity;
+        public PointF maximumPoint = new PointF(0, 0);
+        public float maximumDist = 0;
+
+        public Object(PointF _pos, PointF _velocity, float _radius, float _mass, Color _objColor, bool _doWeCare)
         {
             pos = _pos;
             velocity = _velocity;
             radius = _radius;
             mass = _mass;
             objColor = _objColor;
+            doWeCare = _doWeCare;
 
             gravConstant = 6.67 * Math.Pow(10, -11);
         }
@@ -41,8 +48,8 @@ namespace Physics_Space_Program
 
         void AddForce(PointF _force)
         {
-            velocity.X += _force.X * (myTimeMultiplier / 60f) / mass;
-            velocity.Y += _force.Y * (myTimeMultiplier / 60f) / mass;
+            velocity.X += _force.X * (1 / 60f) / mass;
+            velocity.Y += _force.Y * (1 / 60f) / mass;
         }
 
         public float CalculateDistanceBetweenObjects(Object _obj1, Object _obj2)
@@ -74,10 +81,10 @@ namespace Physics_Space_Program
 
         public void MoveObject()
         {
-            pos.X += (velocity.X / myPixelsToUnits) * myTimeMultiplier;
-            pos.Y += (velocity.Y / myPixelsToUnits) * myTimeMultiplier;
+            pos.X += (velocity.X / myPixelsToUnits);
+            pos.Y += (velocity.Y / myPixelsToUnits);
 
-            if(frame % 5 == 0)
+            if(frame % (5 * myTimeMultiplier) == 0)
             {
                 listOfPos.Add(pos);
                 if(listOfPos.Count > 15)
@@ -95,6 +102,18 @@ namespace Physics_Space_Program
             return new PointF(Convert.ToSingle(theForce * Math.Cos(theDir)), Convert.ToSingle(theForce * Math.Sin(theDir)));
         }
 
-
+        public void UpdateMinMax(Object _theObj1)
+        {
+            if(CalculateDistanceBetweenObjects(this, _theObj1) > maximumDist)
+            {
+                maximumDist = CalculateDistanceBetweenObjects(this, _theObj1);
+                maximumPoint = new PointF(pos.X, pos.Y);
+            }
+            if (CalculateDistanceBetweenObjects(this, _theObj1) < minimumDist)
+            {
+                minimumDist = CalculateDistanceBetweenObjects(this, _theObj1);
+                minimumPoint = new PointF(pos.X, pos.Y);
+            }
+        }
     }
 }
