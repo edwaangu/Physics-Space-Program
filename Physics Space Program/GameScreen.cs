@@ -14,7 +14,7 @@ namespace Physics_Space_Program
     {
         /** GLOBAL VALUES **/
         readonly int pixelToUnits = 1000000000; // What is 1 pixel in real life? (1 million kilometres)
-        readonly float timeMultiplier = 5; // 600 million times faster
+        readonly float timeMultiplier = 15; // 600 million times faster
 
 
         readonly List<Object> objs = new List<Object> ();
@@ -24,10 +24,10 @@ namespace Physics_Space_Program
             InitializeComponent();
 
             objs.Add(new Object(new PointF(0, 0), new PointF(0, 0), 10, Convert.ToInt64(1.989f * Math.Pow(10, 16)))); // Sun
-            objs.Add(new Object(new PointF(69.806f, 0), new PointF(0, 0.17f * pixelToUnits), 2, Convert.ToInt64(3.285f * Math.Pow(10, 9)))); // Mercury
-            objs.Add(new Object(new PointF(107.82f, 0), new PointF(0, 0.145f * pixelToUnits), 5, Convert.ToInt64(4.867f * Math.Pow(10, 10)))); // Venus
-            objs.Add(new Object(new PointF(148, 0), new PointF(0, 0.12f * pixelToUnits), 5, Convert.ToInt64(5.9722f * Math.Pow(10, 10)))); // Earth
-            objs.Add(new Object(new PointF(219, 0), new PointF(0, 0.1f * pixelToUnits), 3, Convert.ToInt64(6.39f * Math.Pow(10, 9)))); // Mars?
+            objs.Add(new Object(new PointF(69.806f, 0), new PointF(0, 0.16f * pixelToUnits), 2, Convert.ToInt64(3.285f * Math.Pow(10, 9)))); // Mercury
+            objs.Add(new Object(new PointF(108.2f, 0), new PointF(0, 0.14325f * pixelToUnits), 5, Convert.ToInt64(4.867f * Math.Pow(10, 10)))); // Venus
+            objs.Add(new Object(new PointF(152, 0), new PointF(0, 0.1195f * pixelToUnits), 5, Convert.ToInt64(5.9722f * Math.Pow(10, 10)))); // Earth
+            objs.Add(new Object(new PointF(249.23f, 0), new PointF(0, 0.0895f * pixelToUnits), 3, Convert.ToInt64(6.39f * Math.Pow(10, 9)))); // Mars?
 
             foreach (Object obj in objs)
             {
@@ -40,7 +40,8 @@ namespace Physics_Space_Program
             e.Graphics.ResetTransform();
             e.Graphics.TranslateTransform(this.Width / 2, this.Height / 2);
             //e.Graphics.ScaleTransform(1 /8f, 1 / 8f);
-            //e.Graphics.TranslateTransform(-objs[1].pos.X, -objs[1].pos.Y);
+            e.Graphics.TranslateTransform(-objs[3].pos.X, -objs[3].pos.Y);
+            int i = 0;
             foreach (Object obj in objs)
             {
                 foreach (PointF point in obj.listOfPos)
@@ -48,6 +49,13 @@ namespace Physics_Space_Program
                     e.Graphics.DrawRectangle(new Pen(Color.FromArgb(36, 36, 36), 2), point.X - 1, point.Y - 1, 2, 2);
                 }
                 e.Graphics.DrawEllipse(new Pen(Color.White, 2), obj.pos.X - obj.radius, obj.pos.Y - obj.radius, obj.radius * 2, obj.radius * 2);
+
+                if(i != 3)
+                {
+                    e.Graphics.DrawLine(new Pen(Color.Blue), obj.pos.X, obj.pos.Y, objs[3].pos.X, objs[3].pos.Y);
+                    e.Graphics.DrawString($"{obj.CalculateDistanceBetweenObjects(obj, objs[3])}", DefaultFont, new SolidBrush(Color.White), new PointF(obj.pos.X, obj.pos.Y - 20));
+                }
+                i++;
             }
         }
 

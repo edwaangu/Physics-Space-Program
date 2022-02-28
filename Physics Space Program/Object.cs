@@ -42,7 +42,7 @@ namespace Physics_Space_Program
             velocity.Y += _force.Y * (myTimeMultiplier / 60f) / mass;
         }
 
-        float CalculateDistanceBetweenObjects(Object _obj1, Object _obj2)
+        public float CalculateDistanceBetweenObjects(Object _obj1, Object _obj2)
         {
             return Convert.ToSingle(Math.Sqrt(Math.Pow(_obj2.pos.X - _obj1.pos.X, 2) + Math.Pow(_obj2.pos.Y - _obj1.pos.Y, 2)));
         }
@@ -77,7 +77,7 @@ namespace Physics_Space_Program
             if(frame % 20 == 0)
             {
                 listOfPos.Add(pos);
-                if(listOfPos.Count > 250)
+                if(listOfPos.Count > 15)
                 {
                     listOfPos.RemoveAt(0);
                 }
