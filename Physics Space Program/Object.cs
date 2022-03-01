@@ -11,7 +11,7 @@ namespace Physics_Space_Program
     {
         public PointF pos, velocity;
         public float radius;
-        readonly float mass;
+        public float mass;
         readonly double gravConstant;
 
         public Color objColor;
@@ -23,10 +23,10 @@ namespace Physics_Space_Program
         float myTimeMultiplier;
         public bool doWeCare;
 
-        public PointF minimumPoint = new PointF(0, 0);
-        public float minimumDist = float.PositiveInfinity;
-        public PointF maximumPoint = new PointF(0, 0);
-        public float maximumDist = 0;
+        public float lastDirection = 0;
+        public float lastDirection2 = 0;
+        public float framesToOrbit = 0;
+        public float _framesToOrbit = 0;
 
         public Object(PointF _pos, PointF _velocity, float _radius, float _mass, Color _objColor, bool _doWeCare)
         {
@@ -87,7 +87,7 @@ namespace Physics_Space_Program
             if(frame % (5 * myTimeMultiplier) == 0)
             {
                 listOfPos.Add(pos);
-                if(listOfPos.Count > 15)
+                if(listOfPos.Count > 50)
                 {
                     listOfPos.RemoveAt(0);
                 }
@@ -102,18 +102,28 @@ namespace Physics_Space_Program
             return new PointF(Convert.ToSingle(theForce * Math.Cos(theDir)), Convert.ToSingle(theForce * Math.Sin(theDir)));
         }
 
-        public void UpdateMinMax(Object _theObj1)
+        public void GetDirectionFromObject(Object _obj1)
         {
-            if(CalculateDistanceBetweenObjects(this, _theObj1) > maximumDist)
+            if(_framesToOrbit >= 2)
             {
-                maximumDist = CalculateDistanceBetweenObjects(this, _theObj1);
-                maximumPoint = new PointF(pos.X, pos.Y);
+                float _dir = Convert.ToSingle(CalculateDirectionBetweenObjects(this, _obj1) * (180 / Math.PI));
+                if(frame > 2)
+                {
+                    if(_dir < lastDirection && lastDirection2 < lastDirection)
+                    {
+                        framesToOrbit = _framesToOrbit + 0;
+                        _framesToOrbit = 0;
+                    }
+                    /*if (_dir > lastDirection && lastDirection2 < lastDirection)
+                    {
+                        framesToOrbit = _framesToOrbit + 0;
+                        _framesToOrbit = 0;
+                    }*/
+                }
             }
-            if (CalculateDistanceBetweenObjects(this, _theObj1) < minimumDist)
-            {
-                minimumDist = CalculateDistanceBetweenObjects(this, _theObj1);
-                minimumPoint = new PointF(pos.X, pos.Y);
-            }
+            lastDirection2 = lastDirection + 0;
+            lastDirection = Convert.ToSingle(CalculateDirectionBetweenObjects(this, _obj1) * (180 / Math.PI));
+            _framesToOrbit++;
         }
     }
 }
